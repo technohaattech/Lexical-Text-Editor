@@ -1,0 +1,11 @@
+declare module 'react-color';
+declare module 'lucide-react';
+declare module '@radix-ui/react-slot';
+declare module '@radix-ui/react-tooltip';
+declare module '@radix-ui/react-popover';
+declare module '@radix-ui/react-dialog';
+declare module '@radix-ui/react-scroll-area';
+declare module 'cmdk';
+declare module 'clsx';
+declare module 'tailwind-merge';
+declare module 'class-variance-authority';
