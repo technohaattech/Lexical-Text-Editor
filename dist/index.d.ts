@@ -5,6 +5,8 @@ interface LexiTexProps {
     onChange: (value: string) => void;
     placeholder?: string;
     name: string;
+    height?: string | null | undefined;
+    width?: string | null | undefined;
 }
 declare const LexicalTextEditor: React.FC<LexiTexProps>;
 

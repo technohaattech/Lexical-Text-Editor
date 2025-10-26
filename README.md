@@ -31,8 +31,10 @@ This package requires several peer dependencies. Make sure to install them in yo
 npm install react-icons lucide-react @radix-ui/react-slot @radix-ui/react-tooltip @radix-ui/react-popover @radix-ui/react-dialog clsx tailwind-merge class-variance-authority react-color
 ```
 
+### Configure Tailwind CSS
+Setup tailwindcss according to the offical installation process:
 
-
+Link: https://tailwindcss.com/docs/installation
 
 
 ## Quick Start
@@ -46,7 +48,7 @@ function App() {
   const [content, setContent] = useState('');
 
   return (
-    <div style={{ padding: '20px', maxWidth: '900px', margin: '0 auto' }}>
+    <div className='p-5 mx-auto'>
       <LexicalTextEditor
         name="my-editor"
         value={content}
@@ -68,6 +70,8 @@ export default App;
 |-------------|-------------------------------------|----------|---------------|---------------------------------------------|
 | `name`      | `string`                            | Yes      | —             | Unique identifier for the editor instance   |
 | `value`     | `string`                            | Yes      | —             | Current editor content (HTML string)        |
+| `width`     | `string`                            | No      | "1090px"       | Adjust the width accoding to the need ('100%' or '100px')       |
+| `height`     | `string`                            | No      | "500px"       | Adjust the height accoding to the need ('100vh' or '100px')       |
 | `onChange`  | `(value: string) => void`           | Yes      | —             | Callback fired when content changes         |
 | `placeholder`| `string`                           | No       | `"Some Text"` | Placeholder text when editor is empty       |
 

@@ -54,7 +54,7 @@ export default function LinkModal({
     <div
       ref={editorRef}
       className={cn(
-        "absolute z-[9999] top-[100px] right-[20px]",
+        "absolute z-[9999] bottom-[-50px] sm:bottom-[-60px] right-[20px]",
         "bg-white shadow-lg rounded-xl px-1.5 py-1 sm:px-3 sm:py-2 flex items-center space-x-2",
         "border border-gray-200"
       )}

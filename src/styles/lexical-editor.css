@@ -1,8 +1,6 @@
-/* Only include Tailwind directives and component-specific styles */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 
 .lexical-text-editor a {
   font-weight: 500;
@@ -13,10 +11,7 @@
   color: #535bf2;
 }
 
-
-/* Component-specific styles - scoped to your editor */
 .lexical-text-editor {
-  /* Custom scrollbar styles - scoped to editor only */
   scrollbar-width: thin;
   scrollbar-color: rgb(156 163 175) transparent;
 }
@@ -38,50 +33,46 @@
   background-color: rgb(107 114 128);
 }
 
-/* Lexical editor specific styles - scoped properly */
 .lexical-text-editor [contenteditable="true"] {
   outline: none;
 }
 
-
-/* Heading styles - make them more specific to your editor */
 .lexical-text-editor h1 {
-  font-size: 2em;
-  margin: 0.5em 0;
+  font-size: 32px;
+  margin: 8px 0;
   font-weight: bold;
 }
 
 .lexical-text-editor h2 {
-  font-size: 1.8em;
-  margin: 0.5em 0;
+  font-size: 28.8px;
+  margin: 8px 0;
   font-weight: bold;
 }
 
 .lexical-text-editor h3 {
-  font-size: 1.6em;
-  margin: 0.2em 0;
+  font-size: 25.6px;
+  margin: 3.2px 0;
   font-weight: bold;
 }
 
 .lexical-text-editor h4 {
-  font-size: 1.4em;
-  margin: 0.2em 0;
+  font-size: 22.4px;
+  margin: 3.2px 0;
   font-weight: bold;
 }
 
 .lexical-text-editor h5 {
-  font-size: 1.2em;
-  margin: 0.2em 0;
+  font-size: 19.2px;
+  margin: 3.2px 0;
   font-weight: bold;
 }
 
 .lexical-text-editor h6 {
-  font-size: 1em;
-  margin: 0.2em 0;
+  font-size: 16px;
+  margin: 3.2px 0;
   font-weight: bold;
 }
 
-/* Alternative scrollbar class if you need it */
 .scrollbar-thin {
   scrollbar-width: thin;
   scrollbar-color: #a5acb6 transparent;

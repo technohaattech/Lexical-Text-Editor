@@ -22,7 +22,9 @@ export interface LexiTexProps {
   value: string
   onChange: (value: string) => void
   placeholder?: string
-  name: string
+  name: string,
+  height?: string | null | undefined;
+  width?: string | null | undefined;
 }
 
 // ✅ Theme config stays same
@@ -50,7 +52,7 @@ const theme: EditorThemeClasses = {
 // ... your imports
 
 export const LexicalTextEditor: React.FC<LexiTexProps> = React.memo(
-  function LexicalTextEditor({ name, value, onChange, placeholder }) {
+  function LexicalTextEditor({ name, value, onChange, placeholder, width = null, height = null }) {
 
     const initialConfig = useMemo(
       () => ({
@@ -76,15 +78,21 @@ export const LexicalTextEditor: React.FC<LexiTexProps> = React.memo(
     );
 
     return (
-      <div className="lexical-text-editor border-[1px] rounded-lg w-full max-w-[900px] pb-2 scrollbar-thin">
+      <div className="lexical-text-editor border-[1px] rounded-lg pb-2 scrollbar-thin"
+        style={{
+          width: width ? width : '',
+          maxWidth: width ? '' : '1090px',
+          height: height ? height : '500px',
+        }}
+      >
         <LexicalComposer initialConfig={initialConfig}>
           <div className="px-2">
             <ToolbarPlugin value={value} />
           </div>
-          <div className="relative">
+          <div className="relative h-full">
             <RichTextPlugin
               contentEditable={
-                <ContentEditable className="h-[400px] text-start w-full text-[14px] p-[8px] overflow-auto outline-0" />
+                <ContentEditable className={`text-start w-full h-full text-[14px] p-[8px] overflow-auto outline-0`} />
               }
               placeholder={
                 <div className="absolute text-[#999] top-[8px] left-[10px] text-[14px]">
