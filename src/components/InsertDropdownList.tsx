@@ -4,7 +4,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "./ui/popover"
-// import { RichTextAction } from "@/constants";
+// import { RichTextAction } from "constants";
 import { useState } from "react"
 import { BsPlus } from "react-icons/bs";
 import { HiChevronDown } from "react-icons/hi2";

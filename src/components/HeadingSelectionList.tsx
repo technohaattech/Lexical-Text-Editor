@@ -1,45 +1,61 @@
-import { Button } from "./ui/button"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "./ui/popover"
 import { HEADINGS } from "../constants/index";
-import { type HeadingTagType } from '@lexical/rich-text'
-
-import { useState } from "react"
+import { type HeadingTagType } from "@lexical/rich-text";
+import { useRef, useState } from "react";
 import { HiChevronDown } from "react-icons/hi2";
+import { Popover, PopoverContent, PopoverTrigger } from "./common/Popover";
+
 
 interface Props {
-  updateHeading: (heading: HeadingTagType | "normal") => void,
-  headingSelectionMap: {
-    [id: string]: boolean;
-  }
+  updateHeading: (heading: HeadingTagType | "normal") => void;
+  headingSelectionMap: { [id: string]: boolean };
 }
+
+
+
 export function HeadingSelectionList({ updateHeading, headingSelectionMap }: Props) {
-  const activeHeading = HEADINGS.find(h => headingSelectionMap[h.id])
-  const [isOpen, setIsOpen] = useState(false)
+  const activeHeading = HEADINGS.find((h) => headingSelectionMap[h.id]);
+  const [open, setOpen] = useState(false);
+  const triggerRef = useRef<HTMLDivElement | null>(null);
+  const contentRef = useRef<HTMLDivElement | null>(null);
+
   return (
-    <Popover open={isOpen} onOpenChange={(s) => setIsOpen(s)}>
-      <PopoverTrigger asChild>
-        <Button variant={isOpen ? "toolbarActive" : "toolbar"}
-          onClick={() => setIsOpen(!isOpen)} size="icon" className="size-8 w-fit p-2 select-none min-w-[130px] border-[1px] border-gray-100"
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger triggerRef={triggerRef}>
+        <button
+          className={`lexical-btn heading-trigger ${open ? "toolbar-active" : "toolbar"}`}
+          onClick={() => setOpen((prev) => !prev)}
+          style={{
+            minWidth: 132
+          }}
         >
-          {activeHeading?.icon}<span>{activeHeading?.label}</span> <HiChevronDown className={` transition-normal duration-100 ${isOpen ? "rotate-180" : "rotate-0"}`} />
-        </Button>
+          {activeHeading?.icon}
+          <span>{activeHeading?.label}</span>
+          <HiChevronDown className={`chevron ${open ? "rotated" : ""}`} />
+        </button>
       </PopoverTrigger>
-      <PopoverContent align="start" className="p-2 w-fit flex flex-col items-start gap-1">
-        {
-          HEADINGS.map(({ id, label, icon }) => (
-            <Button variant={headingSelectionMap[id] ? "toolbarActive" : "toolbar"} key={id}
-              onClick={() => updateHeading(id as HeadingTagType | 'normal')}
-              size="icon" className="size-8 w-full flex justify-start py-2 px-3 select-none"
+
+      <PopoverContent open={open} align="start" onClose={() => setOpen(false)} contentRef={contentRef}>
+        <div
+          style={{
+            display: 'flex', flexDirection: 'column', gap: 5
+          }}>
+          {HEADINGS.map(({ id, label, icon }) => (
+            <button
+              key={id}
+              className={`lexical-btn ${headingSelectionMap[id] ? "toolbar-active" : "toolbar"
+                }`}
+              onClick={() => {
+                updateHeading(id as HeadingTagType | "normal");
+                setOpen(false);
+              }}
             >
-              {icon} <span className="ml-2">{label}</span>
-            </Button>
-          ))
-        }
+              {icon}
+              <span className="label">{label}</span>
+            </button>
+          ))}
+        </div>
       </PopoverContent>
     </Popover>
-  )
+
+  );
 }

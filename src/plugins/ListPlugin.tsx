@@ -12,6 +12,7 @@ import {
   REMOVE_LIST_COMMAND,
 } from "@lexical/list";
 import { BsListOl, BsListUl } from "react-icons/bs";
+import TooltipX from "../components/common/Tooltip";
 
 interface ListPluginProps {
   blockType: string;
@@ -38,39 +39,26 @@ export default function ListPlugin({ blockType }: ListPluginProps) {
 
   return (
     <>
-      <Tooltip delayDuration={700}>
-        <TooltipTrigger asChild>
-          <Button
-            variant={blockType === "ol" ? "toolbarActive" : "toolbar"}
-            size="icon"
-            className="size-8"
-            aria-label="Add ordered list"
-            onClick={handleOrderedList}
-          >
-            <BsListOl />
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent side="bottom">
-          Ordered list
-        </TooltipContent>
-      </Tooltip>
+      <TooltipX content="Ordered list" direction="bottom">
+        <button
+          className={`size-8 ${blockType === "ol" ? "toolbarActive" : "toolbar"
+            } icon`}
+          onClick={handleOrderedList}
+        >
+          <BsListOl />
+        </button>
+      </TooltipX>
 
-      <Tooltip delayDuration={700}>
-        <TooltipTrigger asChild>
-          <Button
-            variant={blockType === "ul" ? "toolbarActive" : "toolbar"}
-            size="icon"
-            className="size-8"
-            aria-label="Add unordered list"
-            onClick={handleUnorderedList}
-          >
-            <BsListUl />
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent side="bottom">
-          Unordered list
-        </TooltipContent>
-      </Tooltip>
+      <TooltipX content="Unordered list" direction="bottom">
+        <button
+          className={`size-8 ${blockType === "ul" ? "toolbarActive" : "toolbar"
+            } icon`}
+          onClick={handleUnorderedList}
+        >
+          <BsListUl />
+        </button>
+      </TooltipX>
+
     </>
   );
 }

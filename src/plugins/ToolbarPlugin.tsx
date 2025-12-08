@@ -14,10 +14,7 @@ import {
   $isLinkNode,
 } from "@lexical/link";
 
-// import ColorPlugin from "./ColorPlugin"
-// import ListPlugin from "./ListPlugin"
 import { $isListNode, ListNode } from '@lexical/list'
-import { Button } from "../components/ui/button"
 import { Tooltip, TooltipContent, TooltipTrigger } from "../components/ui/tooltip"
 import { DropdownList } from "../components/DropdownList"
 import Separator from "../components/Separator"
@@ -30,8 +27,7 @@ import ListPlugin from "./ListPlugin"
 import ImagePlugin from "./ImagePlugin"
 import VideoPlugin from "./VideoPlugin"
 import ContentPreviewDialog from "../components/ContentPreview"
-// import ImagePlugin from "./ImagePlugin"
-// import YoutubePlugin from "./YoutubePlugin"
+import TooltipX from "../components/common/Tooltip"
 
 export const ToolbarPlugin = ({ value }: { value: string }) => {
 
@@ -359,27 +355,29 @@ export const ToolbarPlugin = ({ value }: { value: string }) => {
   //      <div className="flex gap-1.5 justify-start items-center p-1.5 pb-2 mb-1 border-b-[1px] overflow-x-auto overflow-y-hidden scrollbar-thin">
 
   return (
-    <div className="relative flex gap-1.5 flex-wrap justify-center items-center p-1.5 pb-2 mb-1 border-b-[1px]">
+    <div
+      className="lexical-toolbar-wrapper"
+      style={{
+        position: 'relative',
+        padding: 12, marginBottom: 4, borderBottom: '1px solid #e5e7eb'
+      }}
+    >
       {
         RICH_REDO_UNDO_OPTIONS.map(({ id, label, icon }) => (
           id === RichTextAction.Divider ? <Separator key={id} /> :
-            <Tooltip key={id} delayDuration={700}>
-              <TooltipTrigger asChild>
-                <Button variant={selectionMap[id] ? "toolbarActive" : "toolbar"} size="icon" className="size-8"
-                  onClick={() => onAction(id)}
-                  disabled={!!disableMap[id]}
-                >
-                  {icon}
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                {label}
-              </TooltipContent>
-            </Tooltip>
-
+            <TooltipX content={label} direction="bottom" key={label}>
+              <button
+                className={`size-8 ${selectionMap[id] ? "toolbarActive" : "toolbar"
+                  } icon`}
+                onClick={() => onAction(id)}
+                disabled={!!disableMap[id]}
+              >
+                {icon}
+              </button>
+            </TooltipX>
         ))
       }
-      <div className="flex gap-1.5 justify-start items-center">
+      <div style={{ display: 'flex', gap: 6, justifyContent: 'start', alignItems: 'center' }}>
 
         <HeadingSelectionList updateHeading={updateHeading} headingSelectionMap={headingSelectionMap} />
         <Separator />
@@ -387,23 +385,20 @@ export const ToolbarPlugin = ({ value }: { value: string }) => {
       {
         RICH_TEXT_OPTIONS.map(({ id, label, icon }) => (
           id === RichTextAction.Divider ? <Separator key={id} /> :
-            <Tooltip key={id} delayDuration={700}>
-              <TooltipTrigger asChild>
-                <Button variant={selectionMap[id] ? "toolbarActive" : "toolbar"} size="icon" className="size-8"
-                  onClick={() => onAction(id)}
-                  disabled={!!disableMap[id]}
-                >
-                  {icon}
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                {label}
-              </TooltipContent>
-            </Tooltip>
+            <TooltipX key={id} content={label} direction="bottom">
+              <button
+                className={`size-8 ${selectionMap[id] ? "toolbarActive" : "toolbar"
+                  } icon`}
+                onClick={() => onAction(id)}
+              >
+                {icon}
+              </button>
+            </TooltipX>
+
 
         ))
       }
-      <div className="flex gap-1.5 justify-start items-center">
+      <div style={{ display: 'flex', gap: 6, justifyContent: 'start', alignItems: 'center' }}>
 
         <ListPlugin blockType={blockType} />
 
@@ -412,27 +407,6 @@ export const ToolbarPlugin = ({ value }: { value: string }) => {
 
       <ColorPlugin />
 
-      {/* alignment in single row */}
-
-      {/* {
-        RICH_ALIGNMENT_OPTIONS.map(({ id, label, icon }) => (
-          id === RichTextAction.Divider ? <Separator key={id} /> :
-            <Tooltip key={id} delayDuration={700}>
-              <TooltipTrigger asChild>
-                <Button variant={selectionMap[id] ? "toolbarActive" : "toolbar"} size="icon" className="size-8"
-                  onClick={() => onAction(id)}
-                  disabled={!!disableMap[id]}
-                >
-                  {icon}
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                {label}
-              </TooltipContent>
-            </Tooltip>
-        ))
-      }
-      <Separator /> */}
 
       {/* alignment in dropdown */}
 
@@ -440,25 +414,23 @@ export const ToolbarPlugin = ({ value }: { value: string }) => {
       <DropdownList onAction={onAction} selectionMap={selectionMap} />
 
 
-      <div className="flex gap-1.5 justify-start items-center">
+      <div style={{ display: 'flex', gap: 6, justifyContent: 'start', alignItems: 'center' }}>
         <AlignmentSelectionList onAction={onAction} alignmentSelectionMap={selectionMap} />
         <Separator />
       </div>
 
 
-      <Tooltip delayDuration={700}>
-        <TooltipTrigger asChild>
-          <Button variant={selectionMap[RichTextAction.Link] ? "toolbarActive" : "toolbar"} size="icon" className="size-8"
-            onClick={() => onAction(RichTextAction.Link)}
-            disabled={!!disableMap[RichTextAction.Link]}
-          >
-            {<IoIosLink />}
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent side="bottom">
-          {"Link"}
-        </TooltipContent>
-      </Tooltip>
+
+      <TooltipX content="Link" direction="bottom">
+        <button
+          className={`size-8 ${selectionMap[RichTextAction.Link] ? "toolbarActive" : "toolbar"
+            } icon`}
+          onClick={() => onAction(RichTextAction.Link)}
+          disabled={!!disableMap[RichTextAction.Link]}
+        >
+          {<IoIosLink />}
+        </button>
+      </TooltipX>
 
 
       {linkModalOpen &&

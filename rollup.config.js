@@ -31,11 +31,10 @@ export default [
       }),
       commonjs(),
       postcss({
-        extract: 'style.css',
+        extract: 'lexical-editor.css',
         minimize: true,
-        config: {
-          path: './postcss.config.js'
-        }
+        inject: false,
+        modules: false
       }),
       typescript({
         tsconfig: './tsconfig.json',

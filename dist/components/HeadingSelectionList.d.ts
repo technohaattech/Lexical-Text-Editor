@@ -1,4 +1,4 @@
-import { type HeadingTagType } from '@lexical/rich-text';
+import { type HeadingTagType } from "@lexical/rich-text";
 interface Props {
     updateHeading: (heading: HeadingTagType | "normal") => void;
     headingSelectionMap: {

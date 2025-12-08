@@ -5,7 +5,7 @@ import { CodeHighlightNode, CodeNode } from "@lexical/code"
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin"
 import { ContentEditable } from "@lexical/react/LexicalContentEditable"
 import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary"
-import type { EditorThemeClasses } from "lexical"
+import { TextNode, type EditorThemeClasses } from "lexical"
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin"
 import { ListPlugin } from "@lexical/react/LexicalListPlugin"
 import { ListItemNode, ListNode } from "@lexical/list"
@@ -17,6 +17,7 @@ import { ImageNode } from "../nodes/ImageNode"
 import { YoutubeNode } from "../nodes/YoutubeNode"
 import { VideoNode } from "../nodes/VideoNode"
 import "../styles/lexical-editor.css"
+import { ExtendedTextNode } from "../nodes/ExtendedTextNode"
 
 export interface LexiTexProps {
   value: string
@@ -27,29 +28,27 @@ export interface LexiTexProps {
   width?: string | null | undefined;
 }
 
-// ✅ Theme config stays same
 const theme: EditorThemeClasses = {
   text: {
-    bold: "font-bold",
-    underline: "underline",
-    italic: "italic",
-    strikethrough: "line-through",
-    underlineStrikethrough: "underline line-through",
-    uppercase: "uppercase",
-    lowercase: "lowercase",
-    capitalize: "capitalize",
-    code: "bg-gray-100 border border-gray-300 px-1 rounded text-sm font-mono text-black",
+    bold: "lexical-bold",
+    underline: "lexical-underline",
+    italic: "lexical-italic",
+    strikethrough: "lexical-strikethrough",
+    underlineStrikethrough: "lexical-underline-strikethrough",
+    uppercase: "lexical-uppercase",
+    lowercase: "lexical-lowercase",
+    capitalize: "lexical-capitalize",
+    code: "lexical-code",
   },
-  paragraph: "mb-2",
+  paragraph: "lexical-paragraph",
   list: {
-    ul: "list-disc list-inside pl-6",
-    ol: "list-decimal list-inside pl-6",
-    listitem: "mb-1",
+    ul: "lexical-list-ul",
+    ol: "lexical-list-ol",
+    listitem: "lexical-listitem",
   },
-  quote: "border-l-4 border-gray-400 pl-4 italic text-gray-800 bg-gray-50 py-2 rounded-r",
-  link: "text-blue-600 underline hover:text-blue-800",
+  quote: "lexical-quote",
+  link: "lexical-link",
 }
-// ... your imports
 
 export const LexicalTextEditor: React.FC<LexiTexProps> = React.memo(
   function LexicalTextEditor({ name, value, onChange, placeholder, width = null, height = null }) {
@@ -62,6 +61,12 @@ export const LexicalTextEditor: React.FC<LexiTexProps> = React.memo(
           console.error("Lexical error:", error);
         },
         nodes: [
+          ExtendedTextNode,
+          {
+            replace: TextNode,
+            with: (node: TextNode) => new ExtendedTextNode(node.__text),
+            withKlass: ExtendedTextNode,
+          },
           HeadingNode,
           CodeHighlightNode,
           CodeNode,
@@ -78,24 +83,25 @@ export const LexicalTextEditor: React.FC<LexiTexProps> = React.memo(
     );
 
     return (
-      <div className="lexical-text-editor border-[1px] rounded-lg pb-2 scrollbar-thin"
+      <div className="lexical-text-editor lexical-editor-container"
         style={{
           width: width ? width : '',
           maxWidth: width ? '' : '1090px',
-          height: height ? height : '500px',
         }}
       >
         <LexicalComposer initialConfig={initialConfig}>
-          <div className="px-2">
+          <div className="lexical-toolbar-container">
             <ToolbarPlugin value={value} />
           </div>
-          <div className="relative h-full">
+          <div className="lexical-editor-inner">
             <RichTextPlugin
               contentEditable={
-                <ContentEditable className={`text-start w-full h-full text-[14px] p-[8px] overflow-auto outline-0`} />
+                <ContentEditable className="lexical-content-editable" style={{
+                  height: height ? height : '500px',
+                }} />
               }
               placeholder={
-                <div className="absolute text-[#999] top-[8px] left-[10px] text-[14px]">
+                <div className="lexical-placeholder">
                   {placeholder || "Some Text"}
                 </div>
               }

@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { mergeRegister } from '@lexical/utils';
 import { LOW_PRIORIRTY } from '../constants';
 import { AiOutlineBgColors, AiOutlineFontColors } from 'react-icons/ai';
+import TooltipX from '../components/common/Tooltip';
 
 export default function ColorPlugin() {
   const [editor] = useLexicalComposerContext();
@@ -61,20 +62,24 @@ export default function ColorPlugin() {
 
   return (
     <>
-      <ColorPicker
-        color={color}
-        onChange={(color) => {
-          updateColor({ property: 'color', color })
-        }}
-        icon={<AiOutlineFontColors />}
-      />
-      <ColorPicker
-        color={bgColor}
-        onChange={(color) => {
-          updateColor({ property: 'background', color })
-        }}
-        icon={<AiOutlineBgColors />}
-      />
+      <TooltipX content="Font Color" direction="bottom">
+        <ColorPicker
+          color={color}
+          onChange={(color) => {
+            updateColor({ property: 'color', color })
+          }}
+          icon={<AiOutlineFontColors />}
+        />
+      </TooltipX>
+      <TooltipX content="Background Color" direction="bottom">
+        <ColorPicker
+          color={bgColor}
+          onChange={(color) => {
+            updateColor({ property: 'background', color })
+          }}
+          icon={<AiOutlineBgColors />}
+        />
+      </TooltipX>
     </>
   )
 }

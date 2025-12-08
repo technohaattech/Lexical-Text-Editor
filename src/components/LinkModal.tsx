@@ -1,10 +1,7 @@
-// FloatingLinkEditor.tsx
 import { useEffect, useRef, useState } from "react";
-import { Input } from "../components/ui/input";
-import { Button } from "../components/ui/button";
-import { Check, Pencil } from "lucide-react";
-import { cn } from "../lib/utils";
-import { TiDeleteOutline } from "react-icons/ti";
+import { BsPencilSquare } from "react-icons/bs";
+import { MdCheck } from "react-icons/md";
+import { BiUnlink } from "react-icons/bi";
 
 interface LinkEditorProps {
   linkUrl: string;
@@ -25,7 +22,6 @@ export default function LinkModal({
   const editorRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-
   useEffect(() => {
     if (linkUrl === "https://") setEditMode(true);
   }, [linkUrl]);
@@ -45,26 +41,16 @@ export default function LinkModal({
     };
 
     document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [onCancel]);
 
   return (
-    <div
-      ref={editorRef}
-      className={cn(
-        "absolute z-[9999] bottom-[-50px] sm:bottom-[-60px] right-[20px]",
-        "bg-white shadow-lg rounded-xl px-1.5 py-1 sm:px-3 sm:py-2 flex items-center space-x-2",
-        "border border-gray-200"
-      )}
-
-    >
-      <div className="flex-1 min-w-[200px]">
+    <div ref={editorRef} className="lexical-text-editor-link link-editor-container">
+      <div className="link-editor-input-wrapper">
         {isEditMode ? (
-          <Input
+          <input
             ref={inputRef}
-            className="h-8 text-sm"
+            className="link-editor-input"
             value={linkUrl}
             onChange={(e) => setLinkUrl(e.target.value)}
             onKeyDown={(e) => {
@@ -84,47 +70,35 @@ export default function LinkModal({
             href={linkUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-blue-600 text-sm underline truncate block max-w-full text-start"
+            className="link-editor-url"
           >
             {linkUrl}
           </a>
         )}
       </div>
 
-      <div>
-        <Button
-          variant="ghost"
-          size="icon"
+      <div className="link-editor-buttons">
+        <button
           onMouseDown={(e) => e.preventDefault()}
           onClick={() => {
             if (isEditMode) {
               onConfirm(linkUrl);
               setEditMode(false);
-            } else {
-              setEditMode(true);
-            }
+            } else setEditMode(true);
           }}
-          className="h-8 w-8"
+          className={`size-8 toolbar icon`}
         >
-          {isEditMode ? (
-            <Check className="h-4 w-4" />
-          ) : (
-            <Pencil className="h-4 w-4" />
-          )}
-        </Button>
+          {isEditMode ? <MdCheck size={18} /> : <BsPencilSquare size={14} />}
+        </button>
 
-        <Button
-          variant="ghost"
-          size="icon"
+        <button
           onMouseDown={(e) => e.preventDefault()}
           onClick={removeLink}
-          className="h-8 w-8"
+          className={`size-8 toolbar icon`}
         >
-          <TiDeleteOutline className="h-4 w-4" />
-        </Button>
+          <BiUnlink size={14} />
+        </button>
       </div>
-
     </div>
   );
 }
-

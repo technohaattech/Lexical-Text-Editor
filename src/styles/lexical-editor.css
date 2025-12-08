@@ -1,6 +1,24 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+
+/* Minimal Reset */
+
+*{
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+.lexical-text-editor * {
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+
+.lexical-text-editor button {
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+
 
 .lexical-text-editor a {
   font-weight: 500;
@@ -13,8 +31,31 @@
 
 .lexical-text-editor {
   scrollbar-width: thin;
+  font-size: 16px !important;
   scrollbar-color: rgb(156 163 175) transparent;
+  background-color: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding-bottom: 0.5rem;
 }
+
+/* display: 'flex', flexWrap: 'wrap',
+        gap: 6, justifyContent: 'start', alignItems: 'center', */
+
+.lexical-toolbar-wrapper{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  row-gap: 12px;
+  justify-content: center;
+  align-items: center;
+}    
+
+.lexical-toolbar-wrapper.useScroll{
+  flex-wrap: nowrap;
+}
+
+
 
 .lexical-text-editor::-webkit-scrollbar {
   width: 6px;
@@ -91,3 +132,889 @@
   background-color: #a5acb6;
   border-radius: 9999px;
 }
+
+
+
+/* ---------------------------- */
+
+.lexical-editor-container {
+  position: relative;
+  box-sizing: border-box;
+}
+
+.lexical-toolbar-container {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.lexical-editor-inner {
+  position: relative;
+  height: 100%;
+}
+
+.lexical-content-editable {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(156 163 175) transparent;
+  text-align: start;
+  width: 100%;
+  height: 100%;
+  font-size: 14px;
+  padding: 8px;
+  overflow: auto;
+  outline: 0;
+  box-sizing: border-box;
+}
+
+.lexical-placeholder {
+  position: absolute;
+  color: #999;
+  top: 8px;
+  left: 10px;
+  font-size: 14px;
+  pointer-events: none;
+  user-select: none;
+}
+
+.lexical-content-editable::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.lexical-content-editable::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.lexical-content-editable::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.lexical-content-editable::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+.lexical-bold {
+  font-weight: bold;
+}
+
+.lexical-underline {
+  text-decoration: underline;
+}
+
+.lexical-italic {
+  font-style: italic;
+}
+
+.lexical-strikethrough {
+  text-decoration: line-through;
+}
+
+.lexical-underline-strikethrough {
+  text-decoration: underline line-through;
+}
+
+.lexical-uppercase {
+  text-transform: uppercase;
+}
+
+.lexical-lowercase {
+  text-transform: lowercase;
+}
+
+.lexical-capitalize {
+  text-transform: capitalize;
+}
+
+.lexical-code {
+  background-color: #f3f4f6;
+  border: 1px solid #d1d5db;
+  padding: 0 0.25rem;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  font-family: monospace;
+  color: #000;
+}
+
+.lexical-paragraph {
+  margin-bottom: 0.5rem;
+}
+
+.lexical-list-ul {
+  list-style-type: disc;
+  list-style-position: inside;
+  padding-left: 1.5rem;
+}
+
+.lexical-list-ol {
+  list-style-type: decimal;
+  list-style-position: inside;
+  padding-left: 1.5rem;
+}
+
+.lexical-listitem {
+  margin-bottom: 0.25rem;
+}
+
+.lexical-quote {
+  border-left: 4px solid #9ca3af;
+  padding-left: 1rem;
+  font-style: italic;
+  color: #374151;
+  background-color: #f9fafb;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-top-right-radius: 0.25rem;
+  border-bottom-right-radius: 0.25rem;
+}
+
+.lexical-link {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+.lexical-link:hover {
+  color: #1e40af;
+}
+
+
+
+/* --------------------------------------- HeadingSelectionList Start --------------------------------------------- */
+
+
+
+/* --------------------------------------------- HeadingSelectionList End ------------------------------------------ */
+
+
+/* ------------------------------------------- Button Component ------------------------------------------------ */
+
+
+/* ===========================================
+   Base Button (matches shadcn/ui + Tailwind)
+=========================================== */
+.lexical-text-editor .lexical-btn {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+
+  /* Sizing identical to Tailwind’s size-8 + px-3 py-2 */
+  padding: 8px 12px;
+  height: 32px; /* size-8 = 2rem = 32px */
+  border-radius: 6px;
+
+  /* Typography */
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+
+  /* Colors from shadcn toolbar buttons */
+  background: white;
+  color: rgb(75 85 99); /* text-gray-600 */
+
+  /* Interaction */
+  transition: all 0.15s ease;
+  user-select: none;
+  border: none;
+
+  /* Ensures icon + label spacing matches previous */
+  gap: 8px;
+}
+
+/* ===========================================
+   Icon behavior (same as shadcn)
+=========================================== */
+.lexical-text-editor .lexical-btn svg {
+  pointer-events: none;
+  flex-shrink: 0;
+  width: 16px;   /* shadcn default svg size */
+  height: 16px;
+}
+
+.lexical-text-editor .lexical-btn svg[class*="size-"] {
+  /* if custom sizes were applied, keep them */
+  width: auto;
+  height: auto;
+}
+
+/* ===========================================
+   Label spacing identical to Tailwind ml-2
+=========================================== */
+.lexical-text-editor .lexical-btn .label {
+  margin-left: 8px;
+}
+
+/* ===========================================
+   Toolbar (inactive)
+=========================================== */
+.lexical-text-editor .lexical-btn.toolbar {
+  background: white;
+  color: rgb(75 85 99); /* gray-600 */
+}
+
+.lexical-text-editor .lexical-btn.toolbar:hover {
+  background: rgba(241, 245, 249, 0.8); /* slate-100/80 */
+}
+
+/* ===========================================
+   Toolbar Active (matches shadcn toolbarActive)
+=========================================== */
+.lexical-text-editor .lexical-btn.toolbar-active {
+  background: rgb(241 245 249); /* slate-100 */
+  color: rgb(17 24 39); /* gray-900 */
+}
+
+/* ===========================================
+   Disabled (shadcn behavior)
+=========================================== */
+.lexical-text-editor .lexical-btn:disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/******************************
+ * SIZE
+ ******************************/
+.lexical-text-editor .size-8 {
+  width: 32px !important;
+  height: 32px !important;
+}
+
+
+.lexical-text-editor .toolbar {
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: center;
+  border-radius: 8px;
+  background-color: #ffffff;
+  color: #374151;
+  transition: background 0.15s ease, border-color 0.15s ease;
+  cursor: pointer;
+}
+
+.lexical-text-editor .toolbar.icon {
+  display: inline-flex;
+  justify-content: center !important;
+  align-items: center;
+}
+
+.lexical-text-editor .toolbar:hover:not(:disabled) {
+  background-color: #f3f4f6;
+}
+
+
+.lexical-text-editor .toolbarActive {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0.5rem;
+  background-color: #eef2ff;
+  cursor: pointer;
+  padding: 0;
+}
+
+
+.lexical-text-editor button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: #f9fafb;
+}
+
+
+
+
+
+/* ------------------------ Button Component ------------------------------- */
+
+
+
+
+
+/* ----------------------------- Popover ------------------------------- */
+
+
+/* ================================================
+   POPOVER WRAPPER
+================================================ */
+.lexical-text-editor .popover-root {
+  position: relative;
+  display: inline-block;
+}
+
+/* Trigger element wrapper (no styling by default) */
+.lexical-text-editor .popover-trigger {
+  display: inline-block;
+}
+
+/* ================================================
+   POPOVER CONTENT PANEL
+================================================ */
+.lexical-text-editor .popover-content {
+  position: absolute;
+  top: calc(100% + 4px);
+
+  background: white;
+  border-radius: 6px;
+  padding: 8px;
+
+
+  box-shadow:
+    0px 2px 6px rgba(0, 0, 0, 0.12),
+    0px 0px 0px 1px rgba(0, 0, 0, 0.04);
+
+  z-index: 9999;
+  animation: popoverFadeIn 0.15s ease;
+}
+
+/* Alignment options */
+.lexical-text-editor .popover-content.align-start { left: 0; }
+.lexical-text-editor .popover-content.align-center { left: 50%; transform: translateX(-50%); }
+.lexical-text-editor .popover-content.align-end { right: 0; }
+
+/* Fade-in animation */
+@keyframes popoverFadeIn {
+  from { opacity: 0; transform: translateY(-3px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+
+
+/* ============================
+   WRAPPER
+============================ */
+.lexical-text-editor .heading-select {
+  position: relative;
+  display: inline-block;
+}
+
+/* ============================
+   TRIGGER BUTTON (matches old style)
+============================ */
+.lexical-text-editor .heading-trigger {
+  border: 1px solid #e5e7eb; /* gray-100 */
+  height: 32px; /* size-8 */
+  padding: 8px;
+  justify-content: space-between;
+  background-color: white;
+}
+
+/* Chevron rotation same as before */
+.lexical-text-editor .heading-trigger .chevron {
+  transition: transform 0.15s ease;
+}
+
+.lexical-text-editor .heading-trigger .chevron.rotated {
+  transform: rotate(180deg);
+}
+
+/* ============================
+   DROPDOWN PANEL (PopoverContent)
+============================ */
+.lexical-text-editor .heading-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+
+  background: white;
+  border-radius: 6px;
+  padding: 8px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  width: max-content;
+  box-shadow:
+    0px 2px 6px rgba(0, 0, 0, 0.12),
+    0px 0px 0px 1px rgba(0, 0, 0, 0.04);
+
+  z-index: 9999;
+  animation: dropdownFadeIn 0.15s ease;
+}
+
+@keyframes dropdownFadeIn {
+  from { opacity: 0; transform: translateY(-3px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+
+
+
+
+
+
+
+/* ----------------------------- Popover ------------------------------- */
+
+
+
+
+/* -------------------------------- Color Picker Wrapper ----------------------------- */
+
+
+
+
+
+/* Wrapper */
+.color-picker-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.toolbar:hover:not(:disabled) {
+  background-color: #f3f4f6;
+}
+
+.lexical-color-popover {
+  z-index: 99;
+  border-radius: 0.5rem;
+  pointer-events: none;
+  opacity: 0;
+  margin-top: 10px;
+  transform: scale(0.95) translateY(-4px);
+  transform-origin: top left;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.lexical-color-popover.open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1) translateY(0);
+}
+
+
+
+
+
+
+
+/* -------------------------------- Color Picker Wrapper ----------------------------- */
+
+
+
+
+
+
+
+
+/* ----------------------------- Image Node ------------------------------------------ */
+
+
+.lexical-text-editor-dialog {
+
+  /* Buttons */
+  .lte-icon-btn {
+    background: none;
+    border: none;
+    padding: 6px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+  }
+
+  .lte-icon-btn:hover {
+    background: #e5e5e5;
+  }
+
+  .lte-outline-btn {
+    background: #f8f8f8;
+    border: 1px solid #ccc;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .lte-outline-btn:hover {
+    background: #eee;
+  }
+
+  .lte-primary-btn {
+    background-color: #2563eb !important;
+    color: white;
+    padding: 8px 14px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+  }
+
+  .lte-primary-btn:hover {
+    background: #1d4ed8;
+  }
+
+  .lte-primary-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* Inputs */
+  .lte-input {
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: 4px;
+    border: 1px solid #d0d0d0;
+  }
+
+  /* Divider */
+  .lte-divider {
+    display: flex;
+    align-items: center;
+    margin: 12px 0;
+    color: #777;
+    font-size: 13px;
+  }
+
+  .lte-divider::before,
+  .lte-divider::after {
+    content: "";
+    height: 1px;
+    flex: 1;
+    background: #ccc;
+  }
+
+  .lte-divider span {
+    padding: 0 8px;
+  }
+
+  /* File name */
+  .lte-file-name {
+    font-size: 13px;
+    color: #666;
+  }
+
+  /* Dialog Overlay */
+  .lte-dialog-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+  }
+
+  /* Dialog */
+  .lte-dialog {
+    background: white;
+    width: 100%;
+    max-width: 420px;
+    padding: 20px;
+    margin: 10px;
+    border-radius: 8px;
+    position: relative;
+  }
+
+  .lte-dialog.preview{
+    max-width: 1024px;     
+    width: 100%;
+  }
+
+
+  .lte-dialog-header {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #333;
+  }
+
+  .lte-dialog-body {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 10px 0;
+  }
+
+  .lte-dialog-footer {
+    margin-top: 12px;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .lte-dialog-close {
+    position: absolute;
+    top: 10px;
+    right: 18px;
+    background: none;
+    border: none;
+    font-size: 26px;
+    cursor: pointer;
+    opacity: 0.7;
+  }
+
+  .lte-dialog-close:hover {
+    opacity: 1;
+  }
+
+  .lte-hidden {
+    display: none;
+  }
+}
+
+
+
+/* ----------------------------- Image Node ------------------------------------------ */
+
+
+
+/****************************
+  TOOLBAR BUTTON
+****************************/
+.lexical-text-editor .lte-toolbar-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  padding: 6px 10px;
+
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+
+  cursor: pointer;
+  user-select: none;
+  transition: 0.15s ease;
+}
+
+.lexical-text-editor .lte-toolbar-btn:hover {
+  background: #f3f4f6;
+}
+
+.lexical-text-editor .lte-toolbar-btn-active {
+  background: #e0e7ff;
+  border-color: #6366f1;
+}
+
+/****************************
+  PREVIEW SECTION
+****************************/
+.lexical-text-editor .lte-preview-container {
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+
+  padding: 2vw;
+  min-height: 400px;
+}
+
+.lexical-text-editor .lte-preview-title {
+  padding-bottom: 6px;
+  margin-bottom: 14px;
+
+  border-bottom: 2px solid #e5e7eb;
+
+  font-weight: 600;
+  font-size: 15px;
+}
+
+/****************************
+  HTML PREVIEW CONTENT
+****************************/
+.lexical-text-editor-html-preview {
+  max-width: none;
+  line-height: 1.6;
+}
+
+
+/* ==================================== Link Modal ============================================ */
+
+
+
+
+
+/* ✅ Everything is scoped under .lexical-text-editor */
+.lexical-text-editor-link.link-editor-container {
+  position: absolute;
+   bottom: -50px;
+  right: 20px;
+  z-index: 99;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+
+  padding: 6px 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+@media (min-width: 640px) {
+  .lexical-text-editor-link.link-editor-container {
+    bottom: -60px;
+    padding: 8px 14px;
+  }
+}
+
+/* Input area */
+.lexical-text-editor-link .link-editor-input-wrapper {
+  min-width: 200px;
+  flex: 1;
+}
+
+.lexical-text-editor-link .link-editor-input {
+  width: 100%;
+  height: 32px;
+  font-size: 14px;
+  padding: 4px 8px;
+
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+
+  outline: none;
+}
+
+.lexical-text-editor-link .link-editor-input:focus {
+  border-color: #2563eb;
+}
+
+/* URL Preview (non-edit mode) */
+.lexical-text-editor-link .link-editor-url {
+  display: block;
+  font-size: 14px;
+  color: #2563eb;
+  text-decoration: underline;
+
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* Buttons */
+.lexical-text-editor-link .link-editor-buttons {
+  display: flex;
+  gap: 4px;
+}
+
+.lexical-text-editor-link .link-editor-btn {
+  height: 32px;
+  width: 32px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.lexical-text-editor-link .link-editor-btn:hover {
+  background: #f3f4f6;
+}
+
+
+
+
+
+
+/* ==================================== Link Modal ============================================ */
+
+
+/* ========================== Tooltips ============================= */
+.Lexical-Tooltip-Wrapper {
+  display: inline-block;
+  position: relative;
+}
+
+/* Absolute positioning */
+.Lexical-Tooltip-Tip {
+  position: absolute;
+  border-radius: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 8px 12px;
+  color: white;
+  background: #5a5a5a;
+  font-size: 12px;
+  font-family: sans-serif;
+  line-height: 1;
+  z-index: 100;
+  white-space: nowrap;
+  transition: all 0.5s;
+}
+
+
+
+/* CSS border triangles */
+.Lexical-Tooltip-Tip::before {
+  content: " ";
+  left: 50%;
+  border: solid transparent;
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+  border-width: 6px;
+  margin-left: calc(6px * -1);
+}
+
+/* Absolute positioning */
+.Lexical-Tooltip-Tip.top {
+  top: calc(35px * -1);
+}
+/* CSS border triangles */
+.Lexical-Tooltip-Tip.top::before {
+  top: 100%;
+  border-top-color: #5a5a5a;
+}
+
+/* Absolute positioning */
+.Lexical-Tooltip-Tip.right {
+  left: calc(100% + 30px);
+  top: 50%;
+  transform: translateX(0) translateY(-50%);
+}
+/* CSS border triangles */
+.Lexical-Tooltip-Tip.right::before {
+  left: calc(6px * -1);
+  top: 50%;
+  transform: translateX(0) translateY(-50%);
+  border-right-color: #5a5a5a;
+}
+
+/* Absolute positioning */
+.Lexical-Tooltip-Tip.bottom {
+  bottom: calc(35px * -1);
+}
+/* CSS border triangles */
+.Lexical-Tooltip-Tip.bottom::before {
+  bottom: 100%;
+  border-bottom-color: #5a5a5a;
+}
+
+/* Absolute positioning */
+.Lexical-Tooltip-Tip.left {
+  left: auto;
+  right: calc(100% + 30px);
+  top: 50%;
+  transform: translateX(0) translateY(-50%);
+}
+/* CSS border triangles */
+.Lexical-Tooltip-Tip.left::before {
+  left: auto;
+  right: calc(6px * -2);
+  top: 50%;
+  transform: translateX(0) translateY(-50%);
+  border-left-color: #5a5a5a;
+}
+
+
+
+
+
+
+
+
+
+/* ========================== Tooltips ============================= */

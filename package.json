@@ -1,6 +1,6 @@
 {
   "name": "@innoviatech/lexical-text-editor",
-  "version": "1.0.6",
+  "version": "1.0.9",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.esm.js",
@@ -16,7 +16,10 @@
       "require": "./dist/index.js",
       "types": "./dist/index.d.ts"
     },
-    "./style.css": "./dist/style.css"
+    "./style.css": {
+      "import": "./dist/lexical-editor.css",
+      "require": "./dist/lexical-editor.css"
+    }
   },
   "scripts": {
     "build": "rollup -c",
@@ -24,31 +27,32 @@
     "prepublishOnly": "npm run build"
   },
   "peerDependencies": {
-    "react": ">=18",
-    "react-dom": ">=18",
-    "lexical": "^0.36.2",
+    "@lexical/code": "^0.36.2",
+    "@lexical/link": "^0.36.2",
+    "@lexical/list": "^0.36.2",
     "@lexical/react": "^0.36.2",
     "@lexical/rich-text": "^0.36.2",
-    "@lexical/list": "^0.36.2",
-    "@lexical/link": "^0.36.2",
-    "@lexical/code": "^0.36.2"
+    "lexical": "^0.36.2",
+    "react": ">=18",
+    "react-color": "^2.19.3",
+    "react-dom": ">=18",
+    "react-icons": "^5.5.0"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^28.0.0",
     "@rollup/plugin-node-resolve": "^16.0.0",
     "@rollup/plugin-terser": "^0.4.0",
     "@rollup/plugin-typescript": "^12.0.0",
-    "typescript": "^5.0.0",
-    "tslib": "^2.6.0",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "autoprefixer": "^10.4.0",
+    "postcss": "^8.4.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
     "rollup-plugin-dts": "^6.1.0",
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-postcss": "^4.0.2",
-    "autoprefixer": "^10.4.0",
-    "postcss": "^8.4.0",
-    "tailwindcss": "^3.3.0",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
-    "@types/react": "^18.0.0",
-    "@types/react-dom": "^18.0.0"
+    "tslib": "^2.6.0",
+    "typescript": "^5.0.0"
   }
 }

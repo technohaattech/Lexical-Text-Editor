@@ -6,5 +6,5 @@ type ContentPreviewDialogProps = {
     value: string;
     triggerLabel?: string;
 };
-export default function ContentPreviewDialog({ value, triggerLabel }: ContentPreviewDialogProps): import("react/jsx-runtime").JSX.Element;
+export default function ContentPreviewDialog({ value, triggerLabel, }: ContentPreviewDialogProps): import("react/jsx-runtime").JSX.Element;
 export {};
