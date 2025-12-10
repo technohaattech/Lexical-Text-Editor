@@ -1,5 +1,3 @@
-import { Button } from "./ui/button"
-
 import { RICH_TEXT_FORMAT_OPTIONS, RichTextAction } from "../constants/index";
 import { useRef, useState } from "react"
 import { HiChevronDown } from "react-icons/hi2";

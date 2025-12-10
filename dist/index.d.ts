@@ -6,7 +6,7 @@ interface LexiTexProps {
     placeholder?: string;
     name: string;
     height?: string | null | undefined;
-    width?: string | null | undefined;
+    maxWidth?: string | null | undefined;
 }
 declare const LexicalTextEditor: React.FC<LexiTexProps>;
 

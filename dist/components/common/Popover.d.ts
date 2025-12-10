@@ -9,9 +9,7 @@ interface PopoverTriggerProps {
     children: React.ReactNode;
     triggerRef: React.RefObject<HTMLDivElement | null>;
 }
-export declare function PopoverTrigger({ children, triggerRef }: PopoverTriggerProps): React.FunctionComponentElement<{
-    ref: React.RefObject<HTMLDivElement>;
-}>;
+export declare function PopoverTrigger({ children, triggerRef }: PopoverTriggerProps): import("react/jsx-runtime").JSX.Element;
 interface PopoverContentProps {
     open: boolean;
     align?: "start" | "center" | "end";
@@ -19,5 +17,5 @@ interface PopoverContentProps {
     children: React.ReactNode;
     contentRef: React.RefObject<HTMLDivElement | null>;
 }
-export declare function PopoverContent({ open, align, onClose, children, contentRef, }: PopoverContentProps): import("react/jsx-runtime").JSX.Element;
+export declare function PopoverContent({ open, align, children, contentRef, }: PopoverContentProps): import("react/jsx-runtime").JSX.Element;
 export {};

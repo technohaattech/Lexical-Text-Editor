@@ -38,6 +38,6 @@ export declare class ImageNode extends DecoratorNode<JSX.Element> {
     exportJSON(): SerializedImageNode;
     static importJSON(serializedNode: SerializedImageNode): ImageNode;
     updateDimensions(width: number, height: number): void;
-    updateDOM(): boolean;
+    updateDOM(prevNode: ImageNode): boolean;
     decorate(): JSX.Element;
 }

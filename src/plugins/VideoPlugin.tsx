@@ -61,7 +61,7 @@ export default function VideoPlugin() {
       {/* Open dialog button */}
       <button
         type="button"
-        className="lte-icon-btn"
+        className={`size-8 lexical-btn ${isOpen ? "toolbarActive" : "toolbar"} icon`}
         onClick={() => setIsOpen(true)}
       >
         <FaYoutube size={18} color="red" />

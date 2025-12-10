@@ -1,6 +1,6 @@
 import * as React from "react";
 declare const buttonVariants: (props?: {
-    variant?: "link" | "default" | "toolbar" | "toolbarActive" | "destructive" | "outline" | "secondary" | "ghost";
+    variant?: "link" | "toolbar" | "toolbarActive" | "default" | "destructive" | "outline" | "secondary" | "ghost";
     size?: "icon" | "default" | "sm" | "lg";
 } & {
     className?: string;

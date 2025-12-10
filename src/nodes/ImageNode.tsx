@@ -29,13 +29,46 @@ export const $createImageNode = (payload: {
   return $applyNodeReplacement(new ImageNode(payload));
 };
 
+// const convertImageElement = (domNode: Node): DOMConversionOutput | null => {
+//   if (domNode instanceof HTMLImageElement) {
+//     const { src, alt } = domNode;
+//     const node = $createImageNode({ src, altText: alt });
+//     return { node };
+//   }
+//   return null;
+// };
+
 const convertImageElement = (domNode: Node): DOMConversionOutput | null => {
-  if (domNode instanceof HTMLImageElement) {
-    const { src, alt } = domNode;
-    const node = $createImageNode({ src, altText: alt });
-    return { node };
+  if (!(domNode instanceof HTMLImageElement)) return null;
+
+  const { src, alt } = domNode;
+
+  // Try reading width/height from attributes
+  let width: number | "inherit" | undefined = undefined;
+  let height: number | "inherit" | undefined = undefined;
+
+  if (domNode.width) width = domNode.width;
+  if (domNode.height) height = domNode.height;
+
+  // Also check inline styles if attributes are missing
+  const style = domNode.style;
+  if ((!width || width === 0) && style.width) {
+    const parsed = parseInt(style.width);
+    if (!isNaN(parsed)) width = parsed;
   }
-  return null;
+  if ((!height || height === 0) && style.height) {
+    const parsed = parseInt(style.height);
+    if (!isNaN(parsed)) height = parsed;
+  }
+
+  const node = $createImageNode({
+    src,
+    altText: alt,
+    width,
+    height,
+  });
+
+  return { node };
 };
 
 export class ImageNode extends DecoratorNode<JSX.Element> {
@@ -105,9 +138,13 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
   }
 
 
+
+
+
+
   static importDOM(): DOMConversionMap | null {
     return {
-      img: () => ({ conversion: convertImageElement, priority: 0 }),
+      img: () => ({ conversion: convertImageElement, priority: 1 }),
     };
   }
 
@@ -138,10 +175,12 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
     writable.__width = width;
     writable.__height = height;
   }
-  updateDOM(): boolean {
-    return false;
+  updateDOM(prevNode: ImageNode): boolean {
+    return (
+      prevNode.__width !== this.__width ||
+      prevNode.__height !== this.__height
+    );
   }
-
   decorate(): JSX.Element {
     return (
       <ImageComponent

@@ -13,24 +13,12 @@ export function Popover({ open, onOpenChange, children }: PopoverProps) {
   // Close on outside click
   useEffect(() => {
     function handleClick(e: MouseEvent) {
-      if (triggerRef.current?.contains(e.target as Node)) {
-        alert("clicked in trigger button")
+      if (
+        !triggerRef.current?.contains(e.target as Node) &&
+        !contentRef.current?.contains(e.target as Node)
+      ) {
+        onOpenChange(false);
       }
-      else {
-        alert("no click in trigger button")
-      }
-      // if (
-      //   !triggerRef.current?.contains(e.target as Node) &&
-      //   !contentRef.current?.contains(e.target as Node)
-      // ) {
-      //   onOpenChange(false);
-      // }
-      // if (
-      //   !triggerRef.current?.contains(e.target as Node) &&
-      //   !contentRef.current?.contains(e.target as Node)
-      // ) {
-      //   onOpenChange(false);
-      // }
     }
     if (open) document.addEventListener("mousedown", handleClick);
     return () => document.removeEventListener("mousedown", handleClick);
@@ -45,11 +33,11 @@ export function Popover({ open, onOpenChange, children }: PopoverProps) {
       {React.Children.map(children, (child) => {
         if (!child || typeof child !== "object") return child;
 
-        if ((child as any).type?.name === "PopoverTrigger") {
+        if ((child as any).type === PopoverTrigger) {
           return cloneElement(child as any, { triggerRef });
         }
 
-        if ((child as any).type?.name === "PopoverContent") {
+        if ((child as any).type === PopoverContent) {
           return cloneElement(child as any, { contentRef });
         }
 
@@ -83,7 +71,6 @@ interface PopoverContentProps {
 export function PopoverContent({
   open,
   align = "start",
-  onClose,
   children,
   contentRef,
 }: PopoverContentProps) {

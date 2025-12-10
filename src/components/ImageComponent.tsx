@@ -1,6 +1,6 @@
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { $getNodeByKey, type NodeKey } from "lexical";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 
 type ImageComponentProps = {
   src: string;
@@ -20,10 +20,9 @@ export const ImageComponent: React.FC<ImageComponentProps> = ({
   maxWidth,
 }) => {
   const [editor] = useLexicalComposerContext();
-  const [currentSize, setCurrentSize] = useState({
-    width: typeof width === "number" ? width : maxWidth,
-    height: typeof height === "number" ? height : "auto",
-  });
+
+  const dragSizeRef = useRef<{ width: number; height: number, ratio: number } | null>(null);
+
   const wrapperRef = useRef<HTMLDivElement>(null);
   const startPos = useRef<{
     x: number;
@@ -35,35 +34,69 @@ export const ImageComponent: React.FC<ImageComponentProps> = ({
   const onMouseDown = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+
+    const img = wrapperRef.current?.querySelector("img");
+    if (!img) return;
+
+    const renderedWidth = img.getBoundingClientRect().width;
+    const naturalRatio = img.naturalHeight / img.naturalWidth;
+    const renderedHeight = renderedWidth * naturalRatio;
+
     startPos.current = {
       x: e.clientX,
       y: e.clientY,
-      width: currentSize.width as number,
-      height: wrapperRef.current?.offsetHeight ?? 0,
+      width: renderedWidth,
+      height: renderedHeight,
     };
+
+    dragSizeRef.current = {
+      width: renderedWidth,
+      height: renderedHeight,
+      ratio: naturalRatio,
+    };
+
     window.addEventListener("mousemove", onMouseMove);
     window.addEventListener("mouseup", onMouseUp);
   };
 
+
+
   const onMouseMove = (e: MouseEvent) => {
-    if (!startPos.current) return;
+    if (!startPos.current || !dragSizeRef.current) return;
+
     const deltaX = e.clientX - startPos.current.x;
-    const newWidth = Math.min(maxWidth, Math.max(50, startPos.current.width + deltaX));
-    const newHeight =
-      (newWidth / startPos.current.width) * startPos.current.height || "auto";
-    setCurrentSize({ width: newWidth, height: newHeight });
+    const newWidth = Math.min(
+      maxWidth,
+      Math.max(50, startPos.current.width + deltaX)
+    );
+
+    const newHeight = newWidth * dragSizeRef.current.ratio;
+
+    dragSizeRef.current.width = newWidth;
+    dragSizeRef.current.height = newHeight;
+
+    const img = wrapperRef.current?.querySelector("img");
+    if (img) {
+      img.style.width = newWidth + "px";
+      img.style.height = newHeight + "px";
+    }
   };
 
+
   const onMouseUp = () => {
-    if (!startPos.current) return;
+    if (!dragSizeRef.current) return;
+
+    const { width: finalWidth, height: finalHeight } = dragSizeRef.current;
 
     editor.update(() => {
       const node = $getNodeByKey(nodeKey);
-      // Use the node directly without importing ImageNode
-      if (node && typeof (node as any).updateDimensions === 'function') {
-        (node as any).updateDimensions(currentSize.width as number, currentSize.height as number);
+      if (node && typeof (node as any).updateDimensions === "function") {
+        (node as any).updateDimensions(finalWidth, finalHeight);
       }
     });
+
+    dragSizeRef.current = null;
+    startPos.current = null;
 
     window.removeEventListener("mousemove", onMouseMove);
     window.removeEventListener("mouseup", onMouseUp);
@@ -81,9 +114,9 @@ export const ImageComponent: React.FC<ImageComponentProps> = ({
       <img
         src={src}
         alt={altText}
+        width={width === "inherit" ? undefined : width}
+        height={height === "inherit" ? undefined : height}
         style={{
-          width: currentSize.width,
-          height: currentSize.height,
           maxWidth: "100%",
           display: "block",
         }}

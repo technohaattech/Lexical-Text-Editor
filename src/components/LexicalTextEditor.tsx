@@ -25,7 +25,7 @@ export interface LexiTexProps {
   placeholder?: string
   name: string,
   height?: string | null | undefined;
-  width?: string | null | undefined;
+  maxWidth?: string | null | undefined;
 }
 
 const theme: EditorThemeClasses = {
@@ -51,7 +51,7 @@ const theme: EditorThemeClasses = {
 }
 
 export const LexicalTextEditor: React.FC<LexiTexProps> = React.memo(
-  function LexicalTextEditor({ name, value, onChange, placeholder, width = null, height = null }) {
+  function LexicalTextEditor({ name, value, onChange, placeholder, maxWidth = null, height = null }) {
 
     const initialConfig = useMemo(
       () => ({
@@ -85,8 +85,7 @@ export const LexicalTextEditor: React.FC<LexiTexProps> = React.memo(
     return (
       <div className="lexical-text-editor lexical-editor-container"
         style={{
-          width: width ? width : '',
-          maxWidth: width ? '' : '1090px',
+          maxWidth: maxWidth ? maxWidth : '1090px',
         }}
       >
         <LexicalComposer initialConfig={initialConfig}>

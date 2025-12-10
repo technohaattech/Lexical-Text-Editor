@@ -108,6 +108,7 @@ export const ToolbarPlugin = ({ value }: { value: string }) => {
           [HeadingAction.H6]: tag === "h6",
           [HeadingAction.Normal]: element.getType() === "paragraph",
         };
+        setBlockType(element.getType())
         setHeadingSelectionMap(newHeadingSelectionMap);
       }
       else {
@@ -334,16 +335,41 @@ export const ToolbarPlugin = ({ value }: { value: string }) => {
     });
   };
 
+  // const insertLink = useCallback(() => {
+  //   console.log('insertlink');
+  //   const selection = $getSelection();
+  //   if (!$isRangeSelection(selection) || selection.isCollapsed()) {
+  //     // Nothing selected → do nothing
+  //     return;
+  //   }
+
+  //   if (!linkModalOpen) {
+  //     if (linkUrl !== "") {
+  //       editor.dispatchCommand(TOGGLE_LINK_COMMAND, linkUrl);
+  //     }
+  //   } else {
+  //     editor.dispatchCommand(TOGGLE_LINK_COMMAND, null);
+  //   }
+  // }, [editor, linkModalOpen]);
+
   const insertLink = useCallback(() => {
-    console.log('insertlink');
-    if (!linkModalOpen) {
-      if (linkUrl !== "") {
-        editor.dispatchCommand(TOGGLE_LINK_COMMAND, linkUrl);
+    editor.update(() => {
+      const selection = $getSelection();
+      if (!$isRangeSelection(selection) || selection.isCollapsed()) {
+        // Nothing selected → do nothing
+        return;
       }
-    } else {
-      editor.dispatchCommand(TOGGLE_LINK_COMMAND, null);
-    }
-  }, [editor, linkModalOpen]);
+
+      if (!linkModalOpen) {
+        if (linkUrl !== "") {
+          editor.dispatchCommand(TOGGLE_LINK_COMMAND, linkUrl);
+        }
+      } else {
+        editor.dispatchCommand(TOGGLE_LINK_COMMAND, null);
+      }
+    });
+  }, [editor, linkModalOpen, linkUrl]);
+
 
   const removeLink = useCallback(() => {
     setLinkUrl("")
@@ -367,7 +393,7 @@ export const ToolbarPlugin = ({ value }: { value: string }) => {
           id === RichTextAction.Divider ? <Separator key={id} /> :
             <TooltipX content={label} direction="bottom" key={label}>
               <button
-                className={`size-8 ${selectionMap[id] ? "toolbarActive" : "toolbar"
+                className={`size-8 lexical-btn ${selectionMap[id] ? "toolbarActive" : "toolbar"
                   } icon`}
                 onClick={() => onAction(id)}
                 disabled={!!disableMap[id]}
@@ -387,7 +413,7 @@ export const ToolbarPlugin = ({ value }: { value: string }) => {
           id === RichTextAction.Divider ? <Separator key={id} /> :
             <TooltipX key={id} content={label} direction="bottom">
               <button
-                className={`size-8 ${selectionMap[id] ? "toolbarActive" : "toolbar"
+                className={`size-8 lexical-btn ${selectionMap[id] ? "toolbarActive" : "toolbar"
                   } icon`}
                 onClick={() => onAction(id)}
               >
@@ -423,7 +449,7 @@ export const ToolbarPlugin = ({ value }: { value: string }) => {
 
       <TooltipX content="Link" direction="bottom">
         <button
-          className={`size-8 ${selectionMap[RichTextAction.Link] ? "toolbarActive" : "toolbar"
+          className={`size-8 lexical-btn ${selectionMap[RichTextAction.Link] ? "toolbarActive" : "toolbar"
             } icon`}
           onClick={() => onAction(RichTextAction.Link)}
           disabled={!!disableMap[RichTextAction.Link]}

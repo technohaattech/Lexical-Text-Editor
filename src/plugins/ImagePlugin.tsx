@@ -4,6 +4,7 @@ import { $createImageNode } from "../nodes/ImageNode";
 import { useRef, useState } from "react";
 import { IoImageOutline } from "react-icons/io5";
 import RawDialog from "../components/common/Dialog";
+import { LuUpload } from "react-icons/lu";
 
 export default function ImagePlugin() {
   const [editor] = useLexicalComposerContext();
@@ -46,7 +47,7 @@ export default function ImagePlugin() {
 
       {/* Open dialog button */}
       <button
-        className={`size-8 ${isOpen ? "toolbarActive" : "toolbar"} icon`}
+        className={`size-8 lexical-btn ${isOpen ? "toolbarActive" : "toolbar"} icon`}
         onClick={() => setIsOpen((prev) => !prev)}
       >
         <IoImageOutline size={18} />
@@ -77,11 +78,24 @@ export default function ImagePlugin() {
             <span>or</span>
           </div>
 
-          <button
+          {/* <button
             className="lte-outline-btn"
             onClick={() => inputRef.current?.click()}
           >
+            
             Upload Image
+          </button> */}
+
+          <button
+            className={`lexical-btn heading-trigger toolbar-active`}
+            onClick={() => inputRef.current?.click()}
+            style={{
+              width: 'fit-content',
+              margin: '0 auto'
+            }}
+          >
+            <LuUpload size={20} />
+            <span>Upload Image</span>
           </button>
 
           {file && (
