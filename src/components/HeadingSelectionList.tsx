@@ -21,7 +21,7 @@ export function HeadingSelectionList({ updateHeading, headingSelectionMap }: Pro
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger triggerRef={triggerRef}>
-        <button
+        <button type="button"
           className={`lexical-btn heading-trigger ${open ? "toolbar-active" : "toolbar"}`}
           onClick={() => setOpen((prev) => !prev)}
           style={{
@@ -40,7 +40,7 @@ export function HeadingSelectionList({ updateHeading, headingSelectionMap }: Pro
             display: 'flex', flexDirection: 'column', gap: 5
           }}>
           {HEADINGS.map(({ id, label, icon }) => (
-            <button
+            <button type="button"
               key={id}
               className={`lexical-btn ${headingSelectionMap[id] ? "toolbar-active" : "toolbar"
                 }`}

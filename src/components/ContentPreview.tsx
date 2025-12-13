@@ -30,7 +30,7 @@ export default function ContentPreviewDialog({
     <div className="lexical-text-editor-dialog">
       {/* Trigger button */}
 
-      <button
+      <button type="button"
         className={`lexical-btn heading-trigger ${isOpen ? "toolbar-active" : "toolbar"}`}
         onClick={() => setIsOpen((prev) => !prev)}
       >

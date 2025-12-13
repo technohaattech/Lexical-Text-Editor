@@ -9,6 +9,7 @@ import {
 } from "lexical";
 import type { JSX } from "react";
 
+
 export interface SerializedImageNode {
   type: "image";
   version: 1;
@@ -19,86 +20,82 @@ export interface SerializedImageNode {
   height?: number | "inherit";
 }
 
-export const $createImageNode = (payload: {
-  altText: string;
-  height?: number;
-  maxWidth?: number;
+export type ImageNodePayload = {
   src: string;
-  width?: number;
-}) => {
+  altText: string;
+  maxWidth?: number;
+  width?: number | "inherit";
+  height?: number | "inherit";
+};
+
+
+export const $createImageNode = (payload: ImageNodePayload) => {
   return $applyNodeReplacement(new ImageNode(payload));
 };
 
-// const convertImageElement = (domNode: Node): DOMConversionOutput | null => {
-//   if (domNode instanceof HTMLImageElement) {
-//     const { src, alt } = domNode;
-//     const node = $createImageNode({ src, altText: alt });
-//     return { node };
-//   }
-//   return null;
-// };
 
 const convertImageElement = (domNode: Node): DOMConversionOutput | null => {
   if (!(domNode instanceof HTMLImageElement)) return null;
 
   const { src, alt } = domNode;
 
-  // Try reading width/height from attributes
-  let width: number | "inherit" | undefined = undefined;
-  let height: number | "inherit" | undefined = undefined;
+  let width: number | "inherit" | undefined;
+  let height: number | "inherit" | undefined;
 
+  // Attributes
   if (domNode.width) width = domNode.width;
   if (domNode.height) height = domNode.height;
 
-  // Also check inline styles if attributes are missing
+  // Inline styles fallback
   const style = domNode.style;
+
   if ((!width || width === 0) && style.width) {
-    const parsed = parseInt(style.width);
-    if (!isNaN(parsed)) width = parsed;
+    const parsed = parseInt(style.width, 10);
+    if (!Number.isNaN(parsed)) width = parsed;
   }
+
   if ((!height || height === 0) && style.height) {
-    const parsed = parseInt(style.height);
-    if (!isNaN(parsed)) height = parsed;
+    const parsed = parseInt(style.height, 10);
+    if (!Number.isNaN(parsed)) height = parsed;
   }
 
   const node = $createImageNode({
     src,
     altText: alt,
-    width,
-    height,
+    width: width ?? "inherit",
+    height: height ?? "inherit",
   });
 
   return { node };
 };
 
+
 export class ImageNode extends DecoratorNode<JSX.Element> {
   __src: string;
   __altText: string;
-  __height?: "inherit" | number;
-  __width?: "inherit" | number;
+  __width?: number | "inherit";
+  __height?: number | "inherit";
   __maxWidth: number;
 
-  constructor({
-    src = "",
-    altText = "",
-    maxWidth = 1080,
-    width,
-    height,
-    key,
-  }: {
-    src?: string;
-    altText?: string;
-    maxWidth?: number;
-    width?: "inherit" | number;
-    height?: "inherit" | number;
-    key?: NodeKey;
-  } = {}) {
+  constructor(
+    {
+      src = "",
+      altText = "",
+      maxWidth = 1080,
+      width = "inherit",
+      height = "inherit",
+      key,
+    }: ImageNodePayload & { key?: NodeKey } = {
+        src: "",
+        altText: "",
+      }
+  ) {
     super(key);
-    this.__altText = altText;
     this.__src = src;
+    this.__altText = altText;
     this.__maxWidth = maxWidth;
-    this.__height = height;
     this.__width = width;
+    this.__height = height;
   }
 
   static getType(): string {
@@ -107,10 +104,10 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
 
   static clone(node: ImageNode): ImageNode {
     return new ImageNode({
-      altText: node.__altText,
       src: node.__src,
-      height: node.__height,
+      altText: node.__altText,
       width: node.__width,
+      height: node.__height,
       maxWidth: node.__maxWidth,
       key: node.getKey(),
     });
@@ -120,31 +117,37 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
     return document.createElement("span");
   }
 
-  exportDOM(): DOMExportOutput {
-    const image = document.createElement("img");
-    image.setAttribute("src", this.__src);
-    image.setAttribute("alt", this.__altText);
-
-    if (this.__width && this.__width !== "inherit") {
-      image.setAttribute("width", String(this.__width));
-    }
-    if (this.__height && this.__height !== "inherit") {
-      image.setAttribute("height", String(this.__height));
-    }
-
-
-
-    return { element: image };
+  updateDOM(prevNode: ImageNode): boolean {
+    return (
+      prevNode.__width !== this.__width ||
+      prevNode.__height !== this.__height
+    );
   }
 
 
+  exportDOM(): DOMExportOutput {
+    const img = document.createElement("img");
 
+    img.src = this.__src;
+    img.alt = this.__altText;
 
+    if (this.__width !== "inherit") {
+      img.width = this.__width ?? 0;
+    }
 
+    if (this.__height !== "inherit") {
+      img.height = this.__height ?? 0;
+    }
+
+    return { element: img };
+  }
 
   static importDOM(): DOMConversionMap | null {
     return {
-      img: () => ({ conversion: convertImageElement, priority: 1 }),
+      img: () => ({
+        conversion: convertImageElement,
+        priority: 1,
+      }),
     };
   }
 
@@ -175,12 +178,8 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
     writable.__width = width;
     writable.__height = height;
   }
-  updateDOM(prevNode: ImageNode): boolean {
-    return (
-      prevNode.__width !== this.__width ||
-      prevNode.__height !== this.__height
-    );
-  }
+
+
   decorate(): JSX.Element {
     return (
       <ImageComponent
@@ -194,5 +193,3 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
     );
   }
 }
-
-

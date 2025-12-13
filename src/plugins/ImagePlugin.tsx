@@ -46,7 +46,7 @@ export default function ImagePlugin() {
       />
 
       {/* Open dialog button */}
-      <button
+      <button type="button"
         className={`size-8 lexical-btn ${isOpen ? "toolbarActive" : "toolbar"} icon`}
         onClick={() => setIsOpen((prev) => !prev)}
       >
@@ -78,7 +78,7 @@ export default function ImagePlugin() {
             <span>or</span>
           </div>
 
-          {/* <button
+          {/* <button type="button" 
             className="lte-outline-btn"
             onClick={() => inputRef.current?.click()}
           >
@@ -86,7 +86,7 @@ export default function ImagePlugin() {
             Upload Image
           </button> */}
 
-          <button
+          <button type="button"
             className={`lexical-btn heading-trigger toolbar-active`}
             onClick={() => inputRef.current?.click()}
             style={{
@@ -104,7 +104,7 @@ export default function ImagePlugin() {
         </div>
 
         <div className="lte-dialog-footer">
-          <button
+          <button type="button"
             className="lte-primary-btn"
             disabled={!url && !file}
             onClick={addImage}

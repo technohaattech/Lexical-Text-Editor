@@ -21,7 +21,7 @@ export function AlignmentSelectionList({ onAction, alignmentSelectionMap }: Prop
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger triggerRef={triggerRef}>
 
-        <button
+        <button type="button"
           className={`lexical-btn heading-trigger ${isOpen ? "toolbar-active" : "toolbar"}`}
           onClick={() => setIsOpen((prev) => !prev)}
           style={{
@@ -40,7 +40,7 @@ export function AlignmentSelectionList({ onAction, alignmentSelectionMap }: Prop
           }}>
           {
             RICH_ALIGNMENT_OPTIONS.map(({ id, label, icon }) => (
-              <button
+              <button type="button"
                 key={id}
                 className={`lexical-btn ${alignmentSelectionMap[id] ? "toolbar-active" : "toolbar"
                   }`}

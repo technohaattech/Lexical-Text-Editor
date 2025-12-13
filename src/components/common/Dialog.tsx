@@ -37,7 +37,7 @@ export default function RawDialog({ open, onClose, forPreview = false, children 
   return (
     <div className="lexical-text-editor-dialog lte-dialog-overlay">
       <div ref={dialogRef} className={`lte-dialog ${forPreview ? 'preview' : ''}`}>
-        <button className="lte-dialog-close" onClick={onClose}>
+        <button type="button" className="lte-dialog-close" onClick={onClose}>
           ×
         </button>
         {children}

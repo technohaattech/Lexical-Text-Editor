@@ -34,7 +34,7 @@ export default function ListPlugin({ blockType }: ListPluginProps) {
   return (
     <>
       <TooltipX content="Ordered list" direction="bottom">
-        <button
+        <button type="button"
           className={`size-8 lexical-btn ${blockType === "ol" ? "toolbarActive" : "toolbar"
             } icon`}
           onClick={handleOrderedList}
@@ -44,7 +44,7 @@ export default function ListPlugin({ blockType }: ListPluginProps) {
       </TooltipX>
 
       <TooltipX content="Unordered list" direction="bottom">
-        <button
+        <button type="button"
           className={`size-8 lexical-btn ${blockType === "ul" ? "toolbarActive" : "toolbar"
             } icon`}
           onClick={handleUnorderedList}

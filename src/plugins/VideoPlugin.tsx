@@ -59,8 +59,7 @@ export default function VideoPlugin() {
   return (
     <div className="lexical-text-editor-dialog">
       {/* Open dialog button */}
-      <button
-        type="button"
+      <button type="button"
         className={`size-8 lexical-btn ${isOpen ? "toolbarActive" : "toolbar"} icon`}
         onClick={() => setIsOpen(true)}
       >
@@ -87,7 +86,7 @@ export default function VideoPlugin() {
         </div>
 
         <div className="lte-dialog-footer">
-          <button
+          <button type="button"
             className="lte-primary-btn"
             disabled={!url}
             onClick={onEmbed}

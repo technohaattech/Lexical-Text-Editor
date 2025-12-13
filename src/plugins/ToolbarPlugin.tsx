@@ -392,7 +392,7 @@ export const ToolbarPlugin = ({ value }: { value: string }) => {
         RICH_REDO_UNDO_OPTIONS.map(({ id, label, icon }) => (
           id === RichTextAction.Divider ? <Separator key={id} /> :
             <TooltipX content={label} direction="bottom" key={label}>
-              <button
+              <button type="button"
                 className={`size-8 lexical-btn ${selectionMap[id] ? "toolbarActive" : "toolbar"
                   } icon`}
                 onClick={() => onAction(id)}
@@ -412,7 +412,7 @@ export const ToolbarPlugin = ({ value }: { value: string }) => {
         RICH_TEXT_OPTIONS.map(({ id, label, icon }) => (
           id === RichTextAction.Divider ? <Separator key={id} /> :
             <TooltipX key={id} content={label} direction="bottom">
-              <button
+              <button type="button"
                 className={`size-8 lexical-btn ${selectionMap[id] ? "toolbarActive" : "toolbar"
                   } icon`}
                 onClick={() => onAction(id)}
@@ -448,7 +448,7 @@ export const ToolbarPlugin = ({ value }: { value: string }) => {
 
 
       <TooltipX content="Link" direction="bottom">
-        <button
+        <button type="button"
           className={`size-8 lexical-btn ${selectionMap[RichTextAction.Link] ? "toolbarActive" : "toolbar"
             } icon`}
           onClick={() => onAction(RichTextAction.Link)}

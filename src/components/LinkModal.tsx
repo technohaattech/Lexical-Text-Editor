@@ -79,7 +79,7 @@ export default function LinkModal({
 
       <div className="link-editor-buttons">
 
-        <button
+        <button type="button"
           className={`lexical-btn heading-trigger toolbar`}
           onClick={() => {
             if (isEditMode) {
@@ -91,7 +91,7 @@ export default function LinkModal({
           {isEditMode ? <MdCheck size={18} /> : <BsPencilSquare size={14} />}
         </button>
 
-        <button
+        <button type="button"
           className={`lexical-btn heading-trigger toolbar`}
           onMouseDown={(e) => e.preventDefault()}
           onClick={removeLink}
@@ -101,7 +101,7 @@ export default function LinkModal({
 
 
 
-        {/* <button
+        {/* <button type="button" 
           onMouseDown={(e) => e.preventDefault()}
           onClick={() => {
             if (isEditMode) {
@@ -114,7 +114,7 @@ export default function LinkModal({
           {isEditMode ? <MdCheck size={18} /> : <BsPencilSquare size={14} />}
         </button> */}
 
-        {/* <button
+        {/* <button type="button" 
           onMouseDown={(e) => e.preventDefault()}
           onClick={removeLink}
           className={`size-8 toolbar icon`}

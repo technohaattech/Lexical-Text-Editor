@@ -16,7 +16,7 @@ export function DropdownList({ onAction, selectionMap }: Props) {
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger triggerRef={triggerRef}>
-        <button
+        <button type="button"
           className={`lexical-btn heading-trigger ${isOpen ? "toolbar-active" : "toolbar"}`}
           onClick={() => setIsOpen((prev) => !prev)}
         >
@@ -32,7 +32,7 @@ export function DropdownList({ onAction, selectionMap }: Props) {
         >
           {
             RICH_TEXT_FORMAT_OPTIONS.map(({ id, label, icon }) => (
-              <button
+              <button type="button"
                 key={id}
                 className={`lexical-btn ${selectionMap[id] ? "toolbar-active" : "toolbar"
                   }`}
