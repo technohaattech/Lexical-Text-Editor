@@ -25,7 +25,6 @@ export default function ContentPreviewDialog({
   triggerLabel = "Preview",
 }: ContentPreviewDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
-  console.log(value);
   return (
     <div className="lexical-text-editor-dialog">
       {/* Trigger button */}
