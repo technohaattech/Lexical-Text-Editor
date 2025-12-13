@@ -232,6 +232,10 @@ If you find this project helpful, please consider giving it a star on GitHub. It
 
 [![Star on GitHub](https://img.shields.io/github/stars/technohaattech/Lexical-Text-Editor?style=social)](https://github.com/technohaattech/Lexical-Text-Editor)
 
+[![npm version](https://img.shields.io/npm/v/@innoviatech/lexical-text-editor)](
+https://www.npmjs.com/package/@innoviatech/lexical-text-editor
+)
+
 ---
 
 *Made with ❤️ by the Innoviatech team*
