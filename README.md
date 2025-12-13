@@ -2,6 +2,9 @@
 
 A powerful, customizable rich text editor component built with Lexical and React. Features a modern toolbar, image support, video embedding, and comprehensive text formatting options.
 
+![Editor Preview](./editor_screenshot.png)
+
+
 ## What's New in v2.0
 
 - **No Tailwind CSS Required** - Now uses raw CSS for styling 
@@ -22,7 +25,6 @@ A powerful, customizable rich text editor component built with Lexical and React
 - 🎯 **Customizable Toolbar** — Modern, intuitive interface  
 - 🎨 **Color Picker** — Text and background color options  
 - 📱 **Responsive Design** — Works on desktop and mobile  
-- 🎪 **Radix UI Components** — Accessible, well-designed UI elements  
 - ⚡ **TypeScript Support** — Fully typed for better development experience
 
 
