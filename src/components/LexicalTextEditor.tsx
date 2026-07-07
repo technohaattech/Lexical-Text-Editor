@@ -26,6 +26,7 @@ export interface LexiTexProps {
   name: string,
   height?: string | null | undefined;
   maxWidth?: string | null | undefined;
+  onImageUpload?: (file: File) => Promise<string>;
 }
 
 const theme: EditorThemeClasses = {
@@ -51,7 +52,7 @@ const theme: EditorThemeClasses = {
 }
 
 export const LexicalTextEditor: React.FC<LexiTexProps> = React.memo(
-  function LexicalTextEditor({ name, value, onChange, placeholder, maxWidth = null, height = null }) {
+  function LexicalTextEditor({ name, value, onChange, placeholder, maxWidth = null, height = null, onImageUpload }) {
 
     const initialConfig = useMemo(
       () => ({
@@ -90,7 +91,7 @@ export const LexicalTextEditor: React.FC<LexiTexProps> = React.memo(
       >
         <LexicalComposer initialConfig={initialConfig}>
           <div className="lexical-toolbar-container">
-            <ToolbarPlugin value={value} />
+            <ToolbarPlugin value={value} onImageUpload={onImageUpload} />
           </div>
           <div className="lexical-editor-inner">
             <RichTextPlugin

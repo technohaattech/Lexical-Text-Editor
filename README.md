@@ -5,8 +5,11 @@ A powerful, customizable rich text editor component built with Lexical and React
 ![Editor Preview](./editor_screenshot.png)
 
 
-## What's New in v2.0
+## What's New in v2.0.7
 
+- **Image Upload Handler** — Custom upload endpoint support via `onImageUpload` prop
+- **Image Captions** — Add and edit captions on images inline
+- **Paste Image Support** — Paste images from clipboard with automatic upload
 - **No Tailwind CSS Required** - Now uses raw CSS for styling 
 - **Reduced Dependencies** - Fewer peer dependencies to install
 - **Simpler Setup** - Import CSS and start using immediately  
@@ -21,7 +24,7 @@ A powerful, customizable rich text editor component built with Lexical and React
 - 🎨 **Rich Text Editing** — Bold, italic, underline, strikethrough, code blocks  
 - 📝 **Text Formatting** — Headers, paragraphs, lists (bulleted & numbered), quotes  
 - 🔗 **Link Support** — Insert and edit hyperlinks  
-- 🖼️ **Media Embedding** — Images and YouTube videos with resizing  
+- 🖼️ **Media Embedding** — Images (with captions & resize), YouTube videos  
 - 🎯 **Customizable Toolbar** — Modern, intuitive interface  
 - 🎨 **Color Picker** — Text and background color options  
 - 📱 **Responsive Design** — Works on desktop and mobile  
@@ -69,14 +72,15 @@ export default App;
 
 ## Props
 
-| Prop        | Type                                | Required | Default       | Description                                 |
-|-------------|-------------------------------------|----------|---------------|---------------------------------------------|
-| `name`      | `string`                            | Yes      | —             | Unique identifier for the editor instance   |
-| `value`     | `string`                            | Yes      | —             | Current editor content (HTML string)        |
-| `onChange`  | `(value: string) => void`           | Yes      | —             | Callback fired when content changes         |
-| `placeholder`| `string`                           | No       | `"Some Text"` | Placeholder text when editor is empty       |
-| `maxWidth`     | `string`                            | No      | "1090px"       | Adjust the maximum width accoding to the need ('80%' or '800px')       |
-| `height`     | `string`                            | No      | "500px"       | Adjust the height accoding to the need ('50vh' or '500px')       |
+| Prop           | Type                                | Required | Default       | Description                                              |
+|----------------|-------------------------------------|----------|---------------|----------------------------------------------------------|
+| `name`         | `string`                            | Yes      | —             | Unique identifier for the editor instance                |
+| `value`        | `string`                            | Yes      | —             | Current editor content (HTML string)                     |
+| `onChange`     | `(value: string) => void`           | Yes      | —             | Callback fired when content changes                      |
+| `placeholder`  | `string`                            | No       | `"Some Text"` | Placeholder text when editor is empty                    |
+| `maxWidth`     | `string`                            | No       | `"1090px"`    | Adjust the maximum width (`'80%'` or `'800px'`)          |
+| `height`       | `string`                            | No       | `"500px"`     | Adjust the height (`'50vh'` or `'500px'`)                |
+| `onImageUpload`| `(file: File) => Promise<string>`   | No       | —             | Custom handler for uploading images to your server       |
 
 
 
@@ -114,6 +118,49 @@ function App() {
 export default App;
 ```
 
+
+### Image Upload Handler
+
+Upload images to your own server instead of using temporary blob URLs:
+
+```tsx
+import React, { useState } from 'react';
+import { LexicalTextEditor } from '@innoviatech/lexical-text-editor';
+import '@innoviatech/lexical-text-editor/style.css';
+
+function App() {
+  const [content, setContent] = useState('');
+
+  const handleImageUpload = async (file: File): Promise<string> => {
+    const formData = new FormData();
+    formData.append('image', file);
+
+    const res = await fetch('/api/upload', {
+      method: 'POST',
+      body: formData,
+    });
+
+    const data = await res.json();
+    if (!data.url) throw new Error('Upload failed');
+    return data.url; // permanent URL stored in editor content
+  };
+
+  return (
+    <LexicalTextEditor
+      name="editor"
+      value={content}
+      onChange={setContent}
+      onImageUpload={handleImageUpload}
+    />
+  );
+}
+```
+
+When `onImageUpload` is provided, images selected via the dialog, pasted from clipboard, or drag-dropped will be uploaded to your endpoint. The returned URL is stored permanently in the editor content (unlike temporary blob URLs).
+
+### Image Captions
+
+Images support captions. When inserting an image via the dialog, fill in the **Caption** field. After insertion, click the caption text below the image to edit it inline, or click **"+ Add caption"** to add one.
 
 ## Toolbar Features
 

@@ -6,6 +6,7 @@ type ImageComponentProps = {
     width?: number | "inherit";
     height?: number | "inherit";
     maxWidth: number;
+    caption?: string;
 };
 export declare const ImageComponent: React.FC<ImageComponentProps>;
 export {};

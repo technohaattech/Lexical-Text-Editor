@@ -8,6 +8,7 @@ export interface SerializedImageNode {
     maxWidth: number;
     width?: number | "inherit";
     height?: number | "inherit";
+    caption?: string;
 }
 export type ImageNodePayload = {
     src: string;
@@ -15,6 +16,7 @@ export type ImageNodePayload = {
     maxWidth?: number;
     width?: number | "inherit";
     height?: number | "inherit";
+    caption?: string;
 };
 export declare const $createImageNode: (payload: ImageNodePayload) => ImageNode;
 export declare class ImageNode extends DecoratorNode<JSX.Element> {
@@ -23,7 +25,8 @@ export declare class ImageNode extends DecoratorNode<JSX.Element> {
     __width?: number | "inherit";
     __height?: number | "inherit";
     __maxWidth: number;
-    constructor({ src, altText, maxWidth, width, height, key, }?: ImageNodePayload & {
+    __caption: string;
+    constructor({ src, altText, maxWidth, width, height, caption, key, }?: ImageNodePayload & {
         key?: NodeKey;
     });
     static getType(): string;
@@ -35,5 +38,6 @@ export declare class ImageNode extends DecoratorNode<JSX.Element> {
     exportJSON(): SerializedImageNode;
     static importJSON(serializedNode: SerializedImageNode): ImageNode;
     updateDimensions(width: number, height: number): void;
+    setCaption(caption: string): void;
     decorate(): JSX.Element;
 }

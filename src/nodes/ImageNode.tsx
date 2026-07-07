@@ -18,6 +18,7 @@ export interface SerializedImageNode {
   maxWidth: number;
   width?: number | "inherit";
   height?: number | "inherit";
+  caption?: string;
 }
 
 export type ImageNodePayload = {
@@ -26,6 +27,7 @@ export type ImageNodePayload = {
   maxWidth?: number;
   width?: number | "inherit";
   height?: number | "inherit";
+  caption?: string;
 };
 
 
@@ -76,6 +78,7 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
   __width?: number | "inherit";
   __height?: number | "inherit";
   __maxWidth: number;
+  __caption: string;
 
   constructor(
     {
@@ -84,6 +87,7 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
       maxWidth = 1080,
       width = "inherit",
       height = "inherit",
+      caption = "",
       key,
     }: ImageNodePayload & { key?: NodeKey } = {
         src: "",
@@ -96,6 +100,7 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
     this.__maxWidth = maxWidth;
     this.__width = width;
     this.__height = height;
+    this.__caption = caption;
   }
 
   static getType(): string {
@@ -109,6 +114,7 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
       width: node.__width,
       height: node.__height,
       maxWidth: node.__maxWidth,
+      caption: node.__caption,
       key: node.getKey(),
     });
   }
@@ -139,6 +145,15 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
       img.height = this.__height ?? 0;
     }
 
+    if (this.__caption) {
+      const figure = document.createElement("figure");
+      const figcaption = document.createElement("figcaption");
+      figcaption.textContent = this.__caption;
+      figure.appendChild(img);
+      figure.appendChild(figcaption);
+      return { element: figure };
+    }
+
     return { element: img };
   }
 
@@ -146,6 +161,20 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
     return {
       img: () => ({
         conversion: convertImageElement,
+        priority: 1,
+      }),
+      figure: () => ({
+        conversion: (node: HTMLElement) => {
+          const img = node.querySelector("img");
+          if (!img) return null;
+          const figcaption = node.querySelector("figcaption");
+          const caption = figcaption?.textContent || "";
+          const result = convertImageElement(img);
+          if (result?.node instanceof ImageNode && caption) {
+            result.node.__caption = caption;
+          }
+          return result;
+        },
         priority: 1,
       }),
     };
@@ -160,6 +189,7 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
       maxWidth: this.__maxWidth,
       width: this.__width,
       height: this.__height,
+      caption: this.__caption,
     };
   }
 
@@ -170,6 +200,7 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
       maxWidth: serializedNode.maxWidth,
       width: serializedNode.width,
       height: serializedNode.height,
+      caption: serializedNode.caption,
     });
   }
 
@@ -177,6 +208,11 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
     const writable = this.getWritable();
     writable.__width = width;
     writable.__height = height;
+  }
+
+  setCaption(caption: string) {
+    const writable = this.getWritable();
+    writable.__caption = caption;
   }
 
 
@@ -189,6 +225,7 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
         width={this.__width}
         height={this.__height}
         maxWidth={this.__maxWidth}
+        caption={this.__caption}
       />
     );
   }

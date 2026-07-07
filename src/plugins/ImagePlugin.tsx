@@ -1,34 +1,98 @@
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import { $insertNodes } from "lexical";
+import { $insertNodes, COMMAND_PRIORITY_LOW, PASTE_COMMAND } from "lexical";
 import { $createImageNode } from "../nodes/ImageNode";
-import { useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { IoImageOutline } from "react-icons/io5";
 import RawDialog from "../components/common/Dialog";
 import { LuUpload } from "react-icons/lu";
 
-export default function ImagePlugin() {
+type InsertImageParams = {
+  src: string;
+  altText?: string;
+  caption?: string;
+};
+
+async function insertImage(editor: any, { src, altText = "", caption = "" }: InsertImageParams) {
+  editor.update(() => {
+    const node = $createImageNode({ src, altText, caption });
+    $insertNodes([node]);
+  });
+}
+
+export default function ImagePlugin({ onImageUpload }: { onImageUpload?: (file: File) => Promise<string> }) {
   const [editor] = useLexicalComposerContext();
   const inputRef = useRef<HTMLInputElement>(null);
 
   const [isOpen, setIsOpen] = useState(false);
   const [url, setURL] = useState("");
   const [altText, setAltText] = useState("");
+  const [caption, setCaption] = useState("");
   const [file, setFile] = useState<File>();
+  const [isUploading, setIsUploading] = useState(false);
 
-  const addImage = () => {
-    let src = url;
-    if (file) src = URL.createObjectURL(file);
+  const handleFileUpload = useCallback(async (file: File, alt: string = "", cap: string = "") => {
+    let src: string;
 
-    editor.update(() => {
-      const node = $createImageNode({ src, altText });
-      $insertNodes([node]);
-    });
+    if (onImageUpload) {
+      src = await onImageUpload(file);
+    } else {
+      src = URL.createObjectURL(file);
+    }
+
+    insertImage(editor, { src, altText: alt, caption: cap });
+  }, [editor, onImageUpload]);
+
+  const addImage = async () => {
+    if (isUploading) return;
+
+    if (file) {
+      setIsUploading(true);
+      try {
+        await handleFileUpload(file, altText, caption);
+      } catch (err) {
+        console.error("Image upload failed:", err);
+        setIsUploading(false);
+        return;
+      }
+      setIsUploading(false);
+    } else if (url) {
+      insertImage(editor, { src: url, altText, caption });
+    } else {
+      return;
+    }
 
     setFile(undefined);
     setAltText("");
+    setCaption("");
     setURL("");
     setIsOpen(false);
   };
+
+  useEffect(() => {
+    const unregister = editor.registerCommand(
+      PASTE_COMMAND,
+      (payload: ClipboardEvent | InputEvent) => {
+        if (payload instanceof ClipboardEvent) {
+          const items = payload.clipboardData?.items;
+          if (!items) return false;
+
+          for (const item of items) {
+            if (item.type.startsWith("image/")) {
+              payload.preventDefault();
+              const blob = item.getAsFile();
+              if (blob) {
+                handleFileUpload(blob, "", "").catch(console.error);
+              }
+              return true;
+            }
+          }
+        }
+        return false;
+      },
+      COMMAND_PRIORITY_LOW,
+    );
+    return () => unregister();
+  }, [editor, handleFileUpload]);
 
   return (
     <div className="lexical-text-editor-dialog">
@@ -53,8 +117,6 @@ export default function ImagePlugin() {
         <IoImageOutline size={18} />
       </button>
 
-
-
       {/* Dialog */}
       <RawDialog open={isOpen} onClose={() => setIsOpen(false)}>
         <div className="lte-dialog-header">Add Image</div>
@@ -69,6 +131,13 @@ export default function ImagePlugin() {
 
           <input
             className="lte-input"
+            placeholder="Caption"
+            value={caption}
+            onChange={(e) => setCaption(e.target.value)}
+          />
+
+          <input
+            className="lte-input"
             placeholder="Add image by URL"
             value={url}
             onChange={(e) => setURL(e.target.value)}
@@ -77,14 +146,6 @@ export default function ImagePlugin() {
           <div className="lte-divider">
             <span>or</span>
           </div>
-
-          {/* <button type="button" 
-            className="lte-outline-btn"
-            onClick={() => inputRef.current?.click()}
-          >
-            
-            Upload Image
-          </button> */}
 
           <button type="button"
             className={`lexical-btn heading-trigger toolbar-active`}
@@ -106,10 +167,10 @@ export default function ImagePlugin() {
         <div className="lte-dialog-footer">
           <button type="button"
             className="lte-primary-btn"
-            disabled={!url && !file}
+            disabled={(!url && !file) || isUploading}
             onClick={addImage}
           >
-            Add Image
+            {isUploading ? "Uploading..." : "Add Image"}
           </button>
         </div>
       </RawDialog>

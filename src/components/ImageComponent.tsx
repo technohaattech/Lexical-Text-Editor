@@ -1,6 +1,6 @@
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { $getNodeByKey, type NodeKey } from "lexical";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 type ImageComponentProps = {
   src: string;
@@ -9,6 +9,7 @@ type ImageComponentProps = {
   width?: number | "inherit";
   height?: number | "inherit";
   maxWidth: number;
+  caption?: string;
 };
 
 export const ImageComponent: React.FC<ImageComponentProps> = ({
@@ -18,8 +19,12 @@ export const ImageComponent: React.FC<ImageComponentProps> = ({
   width,
   height,
   maxWidth,
+  caption = "",
 }) => {
   const [editor] = useLexicalComposerContext();
+  const [editingCaption, setEditingCaption] = useState(false);
+  const [captionText, setCaptionText] = useState(caption);
+  const captionInputRef = useRef<HTMLInputElement>(null);
 
   const dragSizeRef = useRef<{ width: number; height: number, ratio: number } | null>(null);
 
@@ -102,6 +107,22 @@ export const ImageComponent: React.FC<ImageComponentProps> = ({
     window.removeEventListener("mouseup", onMouseUp);
   };
 
+  const saveCaption = () => {
+    setEditingCaption(false);
+    editor.update(() => {
+      const node = $getNodeByKey(nodeKey);
+      if (node && typeof (node as any).setCaption === "function") {
+        (node as any).setCaption(captionText);
+      }
+    });
+  };
+
+  const startCaptionEdit = () => {
+    setCaptionText(caption);
+    setEditingCaption(true);
+    setTimeout(() => captionInputRef.current?.focus(), 0);
+  };
+
   return (
     <div
       ref={wrapperRef}
@@ -121,11 +142,56 @@ export const ImageComponent: React.FC<ImageComponentProps> = ({
           display: "block",
         }}
       />
+      {(caption || editingCaption) && (
+        <div style={{ textAlign: "center", marginTop: 4 }}>
+          {editingCaption ? (
+            <input
+              ref={captionInputRef}
+              className="lte-input"
+              style={{ width: "100%", textAlign: "center" }}
+              value={captionText}
+              onChange={(e) => setCaptionText(e.target.value)}
+              onBlur={saveCaption}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") saveCaption();
+              }}
+            />
+          ) : (
+            <span
+              style={{
+                fontSize: 13,
+                color: "#666",
+                cursor: "text",
+                display: "inline-block",
+                minWidth: 20,
+                minHeight: 18,
+              }}
+              onClick={startCaptionEdit}
+            >
+              {caption}
+            </span>
+          )}
+        </div>
+      )}
+      {!caption && !editingCaption && (
+        <div style={{ textAlign: "center", marginTop: 2 }}>
+          <span
+            style={{
+              fontSize: 12,
+              color: "#999",
+              cursor: "pointer",
+            }}
+            onClick={startCaptionEdit}
+          >
+            + Add caption
+          </span>
+        </div>
+      )}
       <div
         onMouseDown={onMouseDown}
         style={{
           position: "absolute",
-          bottom: 0,
+          bottom: caption || editingCaption ? 40 : 0,
           right: 0,
           width: 14,
           height: 14,

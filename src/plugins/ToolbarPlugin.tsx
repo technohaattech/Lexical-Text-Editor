@@ -15,7 +15,6 @@ import {
 } from "@lexical/link";
 
 import { $isListNode, ListNode } from '@lexical/list'
-import { Tooltip, TooltipContent, TooltipTrigger } from "../components/ui/tooltip"
 import { DropdownList } from "../components/DropdownList"
 import Separator from "../components/Separator"
 import { HeadingSelectionList } from "../components/HeadingSelectionList"
@@ -29,7 +28,7 @@ import VideoPlugin from "./VideoPlugin"
 import ContentPreviewDialog from "../components/ContentPreview"
 import TooltipX from "../components/common/Tooltip"
 
-export const ToolbarPlugin = ({ value }: { value: string }) => {
+export const ToolbarPlugin = ({ value, onImageUpload }: { value: string; onImageUpload?: (file: File) => Promise<string> }) => {
 
   const [editor] = useLexicalComposerContext();
   const [disableMap, setDisableMap] = useState<{ [id: string]: boolean }>({
@@ -485,7 +484,7 @@ export const ToolbarPlugin = ({ value }: { value: string }) => {
         />}
 
 
-      <ImagePlugin />
+      <ImagePlugin onImageUpload={onImageUpload} />
 
       <VideoPlugin />
 
